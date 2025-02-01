@@ -8,13 +8,13 @@ import (
 
 func main() {
 
-	client, err := clerk.NewClient("")
+	client, err := clerk.NewClient("sk_live_bAThbr83OdoTqYb1KFYk72nQoQ31pxcHi1f1axZ4mX")
 	if err != nil {
 		fmt.Println("Error creating client:", err)
 		return
 	}
 	// Define pagination parameters
-	limit := 25
+	limit := 60
 	offset := 0
 
 	// Retrieve total user count
@@ -28,7 +28,7 @@ func main() {
 	fmt.Printf("Total users: %d\n", totalCount)
 
 	// Loop to paginate through the users
-	for offset < totalCount {
+	for offset < 17 {
 		// List users for the current page
 		users, err := client.Users().ListAll(clerk.ListAllUsersParams{
 			Limit:  &limit,
@@ -41,7 +41,7 @@ func main() {
 
 		// Print user info
 		for _, user := range users {
-			fmt.Printf("%s, %s, %s\n", getFirstName(user), getLastName(user), user.EmailAddresses[0].EmailAddress)
+			fmt.Printf("%s, %s, %s,\n", getFirstName(user), getLastName(user), user.EmailAddresses[0].EmailAddress)
 		}
 
 		// Update offset for next page
@@ -62,6 +62,13 @@ func getFirstName(user clerk.User) string {
 func getLastName(user clerk.User) string {
 	if user.LastName != nil {
 		return *user.LastName
+	}
+	return ""
+}
+
+func getImageURL(user clerk.User) string {
+	if user.ImageURL != nil {
+		return *user.ImageURL
 	}
 	return ""
 }
